@@ -36,3 +36,4 @@ build/
 .temp/
 .env
 application.properties
+.properties
