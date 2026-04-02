@@ -1,4 +1,4 @@
-package com.yuriolivs.herald.herald_auth.domain;
+package com.yuriolivs.herald.herald_auth.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,13 +21,13 @@ public class Tenant {
 
     private String name;
 
-    private boolean isActive;
+    private boolean active;
 
     public Tenant(
             String name,
-            boolean isActive
+            boolean active
     ) {
         this.name = name;
-        this.isActive = isActive;
+        this.active = active;
     }
 }
