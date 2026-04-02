@@ -1,12 +1,12 @@
 package com.yuriolivs.herald.herald_auth.service;
 
+import com.yuriolivs.herald.herald_auth.domain.dto.request.*;
 import com.yuriolivs.herald.herald_auth.domain.entities.Tenant;
 
-import java.util.UUID;
-
 public interface AuthServiceInterface {
-    Tenant validateApiKey(String key);
-    Tenant createTenant(String name);
-    String generateApiKey(UUID id);
-    String revokeApiKey(String key);
+    Tenant validateApiKey(ApiKeyValidateRequest dto);
+    Tenant createTenant(CreateTenantRequest dto);
+    String generateApiKey(GenerateApiKeyRequest dto);
+    String revokeApiKey(RevokeApiKeyRequest dto);
+    String revokeTenantKeys(RevokeTenantKeysRequest dto);
 }
