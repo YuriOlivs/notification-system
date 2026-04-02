@@ -5,30 +5,35 @@ import com.yuriolivs.herald.herald_auth.domain.entities.ApiKey;
 import com.yuriolivs.herald.herald_auth.domain.entities.Tenant;
 import com.yuriolivs.herald.herald_auth.repository.ApiKeyRepository;
 import com.yuriolivs.herald.herald_auth.repository.TenantRepository;
-import com.yuriolivs.herald.herald_auth.security.converter.EncryptionConverter;
-import com.yuriolivs.herald.shared.exceptions.http.HttpBadRequestException;
+import com.yuriolivs.herald.herald_auth.security.ApiKeyGenerator;
 import com.yuriolivs.herald.shared.exceptions.http.HttpNotFoundException;
 import com.yuriolivs.herald.shared.exceptions.http.HttpUnauthorizedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService implements AuthServiceInterface{
-    private EncryptionConverter converter;
+    private PasswordEncoder encoder;
     private TenantRepository tenantRepo;
     private ApiKeyRepository keyRepo;
 
     @Override
     public Tenant validateApiKey(ApiKeyValidateRequest dto) {
-        String key = dto.apiKey();
-        String hashedKey = converter.convertToDatabaseColumn(key);
+        String[] keyParts = dto.apiKey().split("\\.", 2);
+        String prefix = keyParts[0];
+        String secret = keyParts[1];
 
-        Optional<ApiKey> keyFound = keyRepo.findByKey(hashedKey);
+        Optional<ApiKey> keyFound = keyRepo.findByPrefix(prefix);
         if (keyFound.isEmpty() || !keyFound.get().isActive())
+            throw new HttpUnauthorizedException("Invalid API Key");
+
+        if(!encoder.matches(secret, keyFound.get().getSecretHash()))
             throw new HttpUnauthorizedException("Invalid API Key");
 
         Optional<Tenant> tenantFound = tenantRepo.findById(keyFound.get().getTenantId());
@@ -47,36 +52,33 @@ public class AuthService implements AuthServiceInterface{
     }
 
     @Override
-    public String generateApiKey(GenerateApiKeyRequest dto) {
-        return "";
-    }
-
-    @Override
     public String revokeApiKey(RevokeApiKeyRequest dto) {
-        String key = dto.apiKey();
-        String hashedKey = converter.convertToDatabaseColumn(key);
+        String[] keyParts = dto.apiKey().split("\\.", 2);
+        String prefix = keyParts[0];
+        String secret = keyParts[1];
 
-        Optional<ApiKey> keyFound = keyRepo.findByKey(hashedKey);
-        if (keyFound.isEmpty())
-            throw new HttpNotFoundException("Key not found");
+        Optional<ApiKey> keyFound = keyRepo.findByPrefix(prefix);
+        if (keyFound.isEmpty() || !keyFound.get().isActive())
+            throw new HttpUnauthorizedException("Invalid API Key");
 
-        ApiKey keyToInactivate = keyFound.get();
+        if(!encoder.matches(secret, keyFound.get().getSecretHash()))
+            throw new HttpUnauthorizedException("Invalid API Key");
 
-        if (keyToInactivate.isActive()) {
-            keyToInactivate.setActive(false);
-            keyRepo.save(keyToInactivate);
-        }
+        ApiKey keyToBeRevoked = keyFound.get();
+        keyToBeRevoked.setActive(false);
 
-        return "Key deactivated successfully";
+        keyRepo.save(keyToBeRevoked);
+
+        return "Revoked API Key successfully";
     }
 
     @Override
     public String revokeTenantKeys(RevokeTenantKeysRequest dto) {
-        Optional<Tenant> tenanFound = tenantRepo.findById(dto.tenantId());
-        if (tenanFound.isEmpty())
+        Optional<Tenant> tenantFound = tenantRepo.findById(dto.tenantId());
+        if (tenantFound.isEmpty())
             throw new HttpNotFoundException("Tenant not found");
 
-        List<ApiKey> keys = keyRepo.findAllByTenantId(tenanFound.get().getId());
+        List<ApiKey> keys = keyRepo.findAllByTenantId(tenantFound.get().getId());
         if (keys.isEmpty())
             throw new HttpNotFoundException("No keys found");
 
@@ -85,5 +87,25 @@ public class AuthService implements AuthServiceInterface{
         keyRepo.saveAll(keys);
 
         return "All tenant keys were deactivated";
+    }
+
+    @Override
+    public String generateApiKey(GenerateApiKeyRequest dto) throws NoSuchAlgorithmException {
+        String prefix = ApiKeyGenerator.generatePrefix(dto.tenantId());
+        String secret = ApiKeyGenerator.generateSecret();
+
+        String hashedSecret = encoder.encode(secret);
+
+        ApiKey key = ApiKey.builder()
+                .prefix(prefix)
+                .secretHash(hashedSecret)
+                .tenantId(dto.tenantId())
+                .active(true)
+                .build();
+
+        keyRepo.save(key);
+
+
+        return String.join(".", prefix, secret);
     }
 }

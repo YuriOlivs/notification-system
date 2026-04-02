@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class AuthController {
     @PostMapping("/api-key/generate")
     public ResponseEntity<String> generateApiKey(
             @RequestBody @Valid GenerateApiKeyRequest dto
-    ) {
+    ) throws NoSuchAlgorithmException {
         String apiKey = service.generateApiKey(dto);
         return ResponseEntity.ok(apiKey);
     }
