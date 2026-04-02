@@ -1,0 +1,6 @@
+spring.application.name=herald-auth
+
+server.port=8084application.properties
+
+security.internal-key=
+security.encryptation-key=
