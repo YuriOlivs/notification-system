@@ -3,6 +3,7 @@ package com.yuriolivs.herald.herald_auth.controller;
 import com.yuriolivs.herald.herald_auth.domain.dto.request.*;
 import com.yuriolivs.herald.herald_auth.domain.entities.Tenant;
 import com.yuriolivs.herald.herald_auth.service.AuthService;
+import com.yuriolivs.herald.shared.domain.auth.CreateTenantResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +45,16 @@ public class AuthController {
     }
 
     @PostMapping("/tenant/create")
-    public ResponseEntity<Tenant> createTenant(
+    public ResponseEntity<CreateTenantResponse> createTenant(
             @RequestBody @Valid CreateTenantRequest dto
     ) {
         Tenant tenant = service.createTenant(dto);
-        return ResponseEntity.ok(tenant);
+        CreateTenantResponse response = CreateTenantResponse.builder()
+                .id(tenant.getId())
+                .name(tenant.getName())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/tenant/revoke-keys")
