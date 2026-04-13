@@ -18,7 +18,7 @@ public class EncryptionConverter implements AttributeConverter<String, String> {
     public EncryptionConverter(
             SecurityProperties securityProperties
     ) {
-        String key = securityProperties.getEncryptationKey();
+        String key = securityProperties.getEncryptionKey();
         this.secretKey = new SecretKeySpec(
                 key.getBytes(StandardCharsets.UTF_8),
                 ALGORITHM
