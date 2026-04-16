@@ -24,30 +24,30 @@ Each microservice is entirely decoupled and can be deployed independently:
 #### Gateway Flow
 ```mermaid
 graph LR
-    User((Usuário)) --> GW[herald-gateway]
-    GW -->|1. Valida| Auth[herald-auth]
+    User((User)) --> GW[herald-gateway]
+    GW -->|1. Validate| Auth[herald-auth]
     Auth -->|OK| Decision{Tipo de Envio?}
-    Decision -->|Imediato| Service[herald-service]
-    Decision -->|Agendado| Sched[herald-scheduler]
-```
-
-#### Service Flow
-```mermaid
-graph LR
-    Input((Entrada)) --> Service[herald-service]
-    Service -->|1. Publica| RMQ{RabbitMQ}
-    RMQ -->|2. Consome| Service
-    Service -->|3. Dispara| Channels[Email / Telegram]
-    Service -->|4. Log| DB[(PostgreSQL)]
+    Decision -->|Immediate| Service[herald-service]
+    Decision -->|Scheduled| Sched[herald-scheduler]
 ```
 
 ### Scheduler Flow
 ```mermaid
 graph LR
     Sched[herald-scheduler] -->|1. Polling| DB[(PostgreSQL)]
-    DB -->|2. Mensagens Agendadas| Sched
-    Sched -->|3. Publica| RMQ{RabbitMQ}
-    RMQ -.->|Etapa 3 do Service | Service[herald-service]
+    DB -->|2. Scheduled messages| Sched
+    Sched -->|3. Publishes| RMQ{RabbitMQ}
+    RMQ -.->|Next step | Service[herald-service]
+```
+
+#### Service Flow
+```mermaid
+graph LR
+    Input((Input)) --> Service[herald-service]
+    Service -->|1. Publishes| RMQ{RabbitMQ}
+    RMQ -->|2. Consumes| Service
+    Service -->|3. Sends| Channels[Email / Telegram]
+    Service -->|4. Log| DB[(PostgreSQL)]
 ```
 
 ## 🧠 Architecture Evolution
