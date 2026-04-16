@@ -47,7 +47,7 @@ graph LR
     Sched[herald-scheduler] -->|1. Polling| DB[(PostgreSQL)]
     DB -->|2. Mensagens Agendadas| Sched
     Sched -->|3. Publica| RMQ{RabbitMQ}
-    RMQ -.->|Próxima Etapa (Etapa 3) | Service[herald-service]
+    RMQ -.->|Etapa 3 do Service | Service[herald-service]
 ```
 
 ## 🧠 Architecture Evolution
