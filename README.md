@@ -20,6 +20,23 @@ Each microservice is entirely decoupled and can be deployed independently:
 ### Shared Module
 
 * **herald-shared:** A internal Maven library shared across services. It contains common domain models, DTOs, and exception definitions, avoiding code duplication across the system. It is not a deployable service — it is packaged and installed locally as a dependency during the build process.
+
+## 🧠 Architecture Evolution
+
+This project was originally designed as a multi-repository microservices system, where each service was maintained in its own repository.
+
+Later, it was migrated to a monorepo structure to simplify development, dependency management, and local orchestration.
+
+Previous Structure (Multi-Repo)
+- herald-service → https://github.com/YuriOlivs/notification-service
+- herald-scheduler → https://github.com/YuriOlivs/notification-scheduler
+- herald-shared → https://github.com/YuriOlivs/notification-scheduler
+
+Why Monorepo?
+- Simplified local development with a single docker-compose
+- Easier dependency sharing via herald-shared
+- Better version consistency across services
+- Reduced overhead in managing multiple repositories
 ## ⚙️ Tech Stack
 
 **Backend:** Java, Spring Boot (Spring Security, WebFlux)
