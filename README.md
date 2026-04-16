@@ -31,6 +31,25 @@ graph LR
     Decision -->|Agendado| Sched[herald-scheduler]
 ```
 
+#### Service Flow
+```mermaid
+graph LR
+    Input((Entrada)) --> Service[herald-service]
+    Service -->|1. Publica| RMQ{RabbitMQ}
+    RMQ -->|2. Consome| Service
+    Service -->|3. Dispara| Channels[Email / Telegram]
+    Service -->|4. Log| DB[(PostgreSQL)]
+```
+
+### Scheduler Flow
+```mermaid
+graph LR
+    Sched[herald-scheduler] -->|1. Polling| DB[(PostgreSQL)]
+    DB -->|2. Mensagens Agendadas| Sched
+    Sched -->|3. Publica| RMQ{RabbitMQ}
+    RMQ -.->|Próxima Etapa (Etapa 3) | Service[herald-service]
+```
+
 ## 🧠 Architecture Evolution
 
 This project was originally designed as a multi-repository microservices system, where each service was maintained in its own repository.
