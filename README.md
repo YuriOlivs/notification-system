@@ -21,6 +21,7 @@ Each microservice is entirely decoupled and can be deployed independently:
 
 * **herald-shared:** A internal Maven library shared across services. It contains common domain models, DTOs, and exception definitions, avoiding code duplication across the system. It is not a deployable service — it is packaged and installed locally as a dependency during the build process.
 
+#### Gateway Flow
 ```mermaid
 graph LR
     User((Usuário)) --> GW[herald-gateway]
