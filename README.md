@@ -37,7 +37,7 @@ flowchart LR
         DB_V[("PostgreSQL")]
         Channel["Check channel"]
   end
-    User(("Usuário")) -- Request --> GW
+    User(("Client")) -- Request --> GW
     GW -- "1. Auth Check" --> Auth
     Auth -- "2a. Direct" --> Service
     Auth -- "2b. Schedule" --> Sched
