@@ -33,7 +33,7 @@ Later, it was migrated to a monorepo structure to simplify development, dependen
 Previous Structure (Multi-Repo)
 - herald-service → https://github.com/YuriOlivs/notification-service
 - herald-scheduler → https://github.com/YuriOlivs/notification-scheduler
-- herald-shared → https://github.com/YuriOlivs/notification-scheduler
+- herald-shared → https://github.com/YuriOlivs/notification-shared
 
 Why Monorepo?
 - Simplified local development with a single docker-compose
@@ -84,7 +84,7 @@ Each service has its own `application.yaml` in its `src/main/resources` folder. 
 - `spring.rabbitmq.password` — rabbitMQ password
 - `security.encryption-key` — 32 character key used for AES encryption at rest
 - `security.internal-key` — secret key shared between services
-- `mail.from.address` — r-mail used as "from"
+- `mail.from.address` — e-mail used as "from"
 - `mail.from.name` — name for the e-mail used as "from"
 - `telegram.config.token` — Bot token
 
