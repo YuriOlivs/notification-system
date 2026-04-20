@@ -63,36 +63,34 @@ Why Monorepo?
 
 ### Environment Variables
 
-Each service has its own `application.yaml` in its `src/main/resources` folder. Before running the project, fill in the required fields in each file:
+Create a `.env` file in the root of the project with the following variables:
 
-**herald-gateway**
-- `gateway.auth-url` — herald-auth service URL
-- `gateway.auth-key` — secret key shared between gateway and herald-auth
+```env
+# Database — herald-service
+SERVICE_DB_HOST=your_db_host
+SERVICE_DB_USERNAME=your_db_username
+SERVICE_DB_PASSWORD=your_db_password
 
-**herald-auth**
-- `spring.datasource.url` — database connection URL
-- `spring.datasource.username` — database username
-- `spring.datasource.password` — database password
+# Database — herald-scheduler
+SCHEDULER_DB_HOST=your_db_host
+SCHEDULER_DB_USERNAME=your_db_username
+SCHEDULER_DB_PASSWORD=your_db_password
 
-**herald-service**
-- `spring.datasource.url` — database connection URL
-- `spring.datasource.username` — database username
-- `spring.datasource.password` — database password
-- `spring.mail.username` — e-mail that will be used to send via SMTP
-- `spring.mail.password` — app password
-- `spring.rabbitmq.username` — rabbitMQ username
-- `spring.rabbitmq.password` — rabbitMQ password
-- `security.encryption-key` — 32 character key used for AES encryption at rest
-- `security.internal-key` — secret key shared between services
-- `mail.from.address` — e-mail used as "from"
-- `mail.from.name` — name for the e-mail used as "from"
-- `telegram.config.token` — Bot token
+# Database — herald-auth
+AUTH_DB_HOST=your_db_host
+AUTH_DB_USERNAME=your_db_username
+AUTH_DB_PASSWORD=your_db_password
 
-**herald-scheduler**
-- `spring.datasource.url` — database connection URL
-- `spring.datasource.username` — database username
-- `spring.datasource.password` — database password
-- `security.internal-key` — secret key shared between services
+# PgAdmin
+DB_ADMIN_EMAIL=your_pgadmin_email
+
+# RabbitMQ
+RABBITMQ_USERNAME=your_rabbitmq_username
+RABBITMQ_PASSWORD=your_rabbitmq_password
+
+# Security
+AUTH_INTERNAL_KEY=your_internal_key
+AUTH_ENCRYPTION_KEY=your_encryption_key
 
 ### Running the project
 
