@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: ${SCHEDULER_DB_HOST}
+    username: ${SCHEDULER_DB_USERNAME}
+    password: ${SCHEDULER_DB_PASSWORD}
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+herald:
+  routes:
+    service: http://herald-service:8081
+    auth: http://herald-auth:8083
+
+security:
+  internal-key: ${SCHEDULER_INTERNAL_KEY}
