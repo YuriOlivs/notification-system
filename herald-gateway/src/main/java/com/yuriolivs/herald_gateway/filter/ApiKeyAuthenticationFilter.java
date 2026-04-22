@@ -1,8 +1,7 @@
 package com.yuriolivs.herald_gateway.filter;
 
 import com.yuriolivs.herald_gateway.client.AuthClient;
-import com.yuriolivs.herald_gateway.config.RestTemplateConfig;
-import com.yuriolivs.herald_gateway.properties.NotificationGatewayProperties;
+import com.yuriolivs.herald_gateway.config.properties.NotificationGatewayProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
