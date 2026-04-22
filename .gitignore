@@ -35,6 +35,4 @@ build/
 ### Local Configuration ###
 .temp/
 .env
-application.properties
-.properties
-application.yaml
+application-dev.yaml

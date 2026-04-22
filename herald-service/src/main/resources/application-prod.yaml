@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: ${SERVICE_DB_HOST}
+    username: ${SERVICE_DB_USERNAME}
+    password: ${SERVICE_DB_PASSWORD}
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: false
+
+server:
+  port: 8083
+
+mail:
+  from:
+    address: ${MAIL_FROM_ADDRESS}
+    name: ${MAIL_FROM_NAME}
+
+telegram:
+  config:
+    apiUrl: https://api.telegram.org/bot
+    token: ${TELEGRAM_CONFIG_TOKEN}
+
+security:
+  internal-key: ${SERVICE_SECURITY_INTERNAL_KEY}
+  encryption-key: ${SERVICE_SECURITY_ENCRYPTION_KEY}

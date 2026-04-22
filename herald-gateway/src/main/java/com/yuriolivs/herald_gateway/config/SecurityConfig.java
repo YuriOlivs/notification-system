@@ -1,6 +1,6 @@
 package com.yuriolivs.herald_gateway.config;
 
-import com.yuriolivs.herald_gateway.properties.NotificationGatewayProperties;
+import com.yuriolivs.herald_gateway.config.properties.NotificationGatewayProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

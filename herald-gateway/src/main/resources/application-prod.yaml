@@ -1,0 +1,9 @@
+herald:
+  routes:
+    service: http://herald-service:8081
+    scheduler: http://herald-scheduler:8082
+    webhooks: http://herald-scheduler:8082
+    auth: http://herald-auth:8083
+
+auth:
+  internal-key: ${AUTH_INTERNAL_KEY}
